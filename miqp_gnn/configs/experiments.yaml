@@ -1,0 +1,62 @@
+# 六组实验的统一配置（对齐 miqp_gnn.tex 第4章实验设计）
+
+experiments:
+  linearization_comparison:
+    description: "PLA vs McCormick vs Adaptive，在不同问题类型下比较误差、规模、求解时间"
+    datasets: [portfolio_small, portfolio_medium, qap_small, qap_medium, qcqp, boxqp]
+    metrics: [linearization_error, size_ratio, solve_time]
+    fixed_segments: 10
+  cut_selection_benchmark:
+    description: "割平面选择方法对比"
+    baselines: [Direct-MIQP, PLA-Default, PLA-GCNN, PLA-HGT-NoHier]
+    ours: [Ours-PLA, Ours-McCormick, Ours-Adaptive]
+    metrics: [gap_closed, topk_hit, spearman, original_validity]
+    cut_budget: [5, 10, 20]
+  end_to_end_performance:
+    description: "完整求解流程，比较求解时间和解质量"
+    metrics: [solve_time, solution_gap, nodes_explored]
+    tolerance: 1e-4
+  ablation:
+    description: "验证四部图、层次消息、Q注意力、误差编码、辅助特征等组件贡献"
+    configs: [full, no_quadratic_attn, no_hierarchy, no_error_encoding, no_aux_features, three_partite]
+    metrics: [gap_closed, contrib_rank_kl, training_time]
+  generalization:
+    description: "跨问题类型/规模/Q性质的泛化能力"
+    scenarios:
+      - train: portfolio_small
+        test: qap_small
+      - train: qap_small
+        test: qap_medium
+      - train: portfolio_small
+        test: qap_medium
+      - train: qcqp
+        test: boxqp
+    metrics: [gap_closed, delta_z_miqp, epsilon]
+  efficiency_scaling:
+    description: "分析线性化时间、GNN推理时间和内存随规模变化情况"
+    metrics: [linearization_time, cut_extraction_time, gnn_inference_time, memory_peak]
+    instance_sizes: [200, 400, 800, 1200]
+
+reporting:
+  tables:
+    - name: dataset_stats
+      source: metadata
+      columns: [n_mean, p_mean, q_density, size_ratio]
+    - name: linearization_vs_error
+      source: linearization_comparison
+    - name: cut_selection
+      source: cut_selection_benchmark
+    - name: end_to_end
+      source: end_to_end_performance
+    - name: ablation
+      source: ablation
+    - name: generalization
+      source: generalization
+    - name: efficiency
+      source: efficiency_scaling
+  plots:
+    - name: error_vs_segments
+      axes: [segments, epsilon]
+      datasets: [portfolio_small, qap_small]
+    - name: gap_closed_bar
+    - name: runtime_breakdown

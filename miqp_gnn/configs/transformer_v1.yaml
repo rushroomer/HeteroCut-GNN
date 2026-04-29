@@ -1,0 +1,30 @@
+model:
+  hidden_dim: 256        # 256 (vs 128 in HGT) - 更大的表示空间
+  num_layers: 8          # 8 (vs 6 in HGT) - 更深的网络
+  num_heads: 8           # 8 heads for multi-head attention
+  dropout: 0.15          # 0.15 for regularization
+  feature_norm: true
+
+training:
+  batch_size: 6          # 6 (平衡速度和性能)
+  epochs: 100
+  optimizer: adamw
+  lr: 0.0003             # 0.0003 (lower for stability)
+  weight_decay: 0.01
+  grad_clip: 0.5         # 0.5 (stricter clipping)
+  warmup_epochs: 5
+  scheduler: cosine
+
+loss:
+  lambda_listmle: 0.4    # 40% ranking via ListMLE
+  lambda_listnet: 0.25   # 25% ranking via ListNet
+  lambda_topk: 0.25      # 25% top-k weighted MSE
+  lambda_reg: 0.1        # 10% regularization
+  topk_k: 10
+  topk_weight: 8.0
+
+logging:
+  eval_every: 1
+  ckpt_dir: experiments/models
+  log_dir: experiments/logs
+  monitor_metric: topk_precision@10

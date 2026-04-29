@@ -1,0 +1,103 @@
+# 节点与割平面特征配置
+# 依据 miqp_gnn.tex 表 4.1、4.2 与线性化章节编制
+
+node_types:
+  original_variable:
+    description: "原始MILP变量（连续+整数），在MILP章节特征基础上扩展二次结构特征"
+    features:
+      - name: type_one_hot
+        dims: 3
+        note: "二进制/整数/连续"
+      - name: cost
+        note: "目标函数系数"
+      - name: reduced_cost
+      - name: lp_value
+      - name: bounds
+        note: "上下界及宽度"
+      - name: row_nnz
+        note: "参加约束的非零计数"
+      - name: Q_diagonal
+      - name: Q_row_nnz
+      - name: Q_row_sum
+      - name: quad_degree
+      - name: max_coupling
+      - name: avg_coupling
+      - name: coupling_variance
+      - name: coupled_int_ratio
+  auxiliary_variable:
+    description: "线性化引入的辅助变量（PLA、McCormick、二进制乘积等）"
+    features:
+      - name: type_one_hot
+        dims: 4
+        note: "PLA / McCormick / binary_prod / mixed_prod"
+      - name: source_var_idx_1
+      - name: source_var_idx_2
+      - name: source_Q_coef
+      - name: source_Q_sign
+      - name: approx_error_bound
+      - name: log_error_bound
+      - name: relative_error
+      - name: error_rank
+      - name: segment_index
+      - name: segment_width
+      - name: segment_position
+      - name: num_segments
+      - name: current_value
+      - name: bound_range
+      - name: is_active
+      - name: constraint_count
+      - name: Q_row_norm
+      - name: Q_col_norm
+      - name: local_density
+      - name: centrality
+  original_constraint:
+    description: "原始线性约束，沿用MILP章节特征"
+    features:
+      - name: type_one_hot
+        dims: 3
+      - name: rhs
+      - name: dual_value
+      - name: activity
+      - name: violation
+      - name: nnz
+      - name: integer_support_ratio
+      - name: slack
+  linearization_constraint:
+    description: "SOS2、McCormick边等线性化约束"
+    features:
+      - name: inherited_linear_features
+      - name: is_sos2
+      - name: is_mccormick_bound
+      - name: is_binary_linearize
+      - name: num_aux_vars
+      - name: num_orig_vars
+      - name: linearization_depth
+      - name: induced_error
+      - name: tightness_original
+      - name: violation_original
+      - name: error_sensitivity
+cut_features:
+  base:
+    - name: rhs
+    - name: support
+    - name: int_support
+    - name: efficacy
+    - name: cutoff
+    - name: parallelism
+  extended:
+    - name: obj_projection
+    - name: original_validity
+    - name: error_impact
+    - name: aux_coverage_ratio
+    - name: sos2_overlap
+    - name: Q_attention_score
+
+labels:
+  - name: delta_z_milp
+    description: "线性化MILP上的下界提升"
+  - name: delta_z_miqp
+    description: "映射回原始MIQP后的下界提升"
+  - name: epsilon
+    description: "|delta_z_milp - delta_z_miqp|"
+  - name: contribution_weight
+    description: "割平面集合中的真实贡献分布"

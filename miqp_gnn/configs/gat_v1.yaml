@@ -1,0 +1,41 @@
+# GAT Baseline Configuration
+# Purpose: Compare Graph Attention vs Transformer attention
+
+model:
+  type: gat
+  hidden_dim: 256
+  num_layers: 4
+  num_heads: 4
+  dropout: 0.15
+
+training:
+  batch_size: 8
+  epochs: 100
+  optimizer: adamw
+  lr: 0.0003
+  weight_decay: 0.0001
+  use_amp: true
+  gradient_clip_val: 1.0
+
+loss:
+  lambda_listmle: 0.4
+  lambda_listnet: 0.25
+  lambda_topk: 0.25
+  lambda_reg: 0.1
+  topk_k: 10
+  topk_weight: 8.0
+
+data:
+  data_root: MIQP/data/graphs/portfolio_15d
+  num_workers: 8
+  pin_memory: true
+
+experiment:
+  name: gat_baseline
+  save_freq: 10
+  eval_freq: 1
+  log_freq: 50
+
+# Expected performance:
+# Top-10: ~65-70%
+# Purpose: Validate that Transformer > simple attention

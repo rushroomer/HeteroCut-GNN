@@ -1,0 +1,31 @@
+model:
+  hidden_dim: 128
+  num_layers: 6       # 增加到6层，提升消息传递深度
+  num_heads: 8
+  dropout: 0.2        # 增加dropout防止过拟合
+  use_residual: true  # 启用残差连接
+  feature_norm: true
+
+training:
+  batch_size: 8           # 4 → 8 (更快训练)
+  epochs: 100
+  optimizer: adamw
+  lr: 0.002               # 0.0005 → 0.002 (提高4倍)
+  weight_decay: 0.01
+  grad_clip: 1.0
+  warmup_epochs: 3        # 5 → 3 (更快进入正常学习)
+  scheduler: cosine
+
+loss:
+  lambda_listmle: 0.4   # 稍微降低ranking权重
+  lambda_listnet: 0.25
+  lambda_topk: 0.25     # 提高回归权重
+  lambda_reg: 0.1       # 提高regularization
+  topk_k: 10
+  topk_weight: 8.0
+
+logging:
+  eval_every: 1
+  ckpt_dir: experiments/models
+  log_dir: experiments/logs
+  monitor_metric: topk_precision@10

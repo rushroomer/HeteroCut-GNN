@@ -1,0 +1,46 @@
+# Graph Transformer (4 Layers) - Ablation Study
+# Purpose: Verify network depth contribution
+
+model:
+  type: transformer
+  hidden_dim: 256
+  num_layers: 4  # KEY: Reduce from 8 to 4 layers
+  num_heads: 8
+  dropout: 0.15
+  use_cross_attention: true
+  use_ffn: true
+  use_residual: true
+
+training:
+  batch_size: 6
+  epochs: 100
+  optimizer: adamw
+  lr: 0.0003
+  weight_decay: 0.0001
+  use_amp: true
+  gradient_clip_val: 1.0
+
+loss:
+  lambda_listmle: 0.4
+  lambda_listnet: 0.25
+  lambda_topk: 0.25
+  lambda_reg: 0.1
+  topk_k: 10
+  topk_weight: 8.0
+
+data:
+  data_root: MIQP/data/graphs/portfolio_15d
+  num_workers: 8
+  pin_memory: true
+
+experiment:
+  name: ablation_4layer
+  save_freq: 10
+  eval_freq: 1
+  log_freq: 50
+
+# Expected performance:
+# Top-10: ~73-75% (vs 76.2% full 8-layer model)
+# Expected drop: 1-2 percentage points
+# Purpose: Verify depth necessity (8 layers vs 4 layers)
+# Training time: ~50% of full model (~5 hours vs ~10 hours)

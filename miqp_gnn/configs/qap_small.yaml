@@ -1,0 +1,20 @@
+dataset_name: qap_small
+problem_type: qap
+train_split: 3000
+valid_split: 600
+test_split: 600
+variables:
+  n_facilities: [60, 120]
+  n_locations: [60, 120]
+  binary_only: true
+quadratic:
+  flow_scale: 1.0
+  distance_scale: 1.0
+  seed: 7
+linearization:
+  method: mccormick
+  tighten_bounds: true
+cut_generation:
+  solver: gurobi
+  root_gap_samples: 20
+  max_candidate_cuts: 80

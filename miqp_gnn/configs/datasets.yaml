@@ -1,0 +1,81 @@
+# 数据集规模设定，对齐 miqp_gnn.tex 表 \ref{tab:miqp_datasets}
+
+datasets:
+  portfolio_small:
+    type: portfolio
+    n_range: [50, 100]
+    p_range: [20, 50]
+    q_density: 0.1
+    Q_property: psd
+    num_train: 5000
+    num_valid: 1000
+    num_test: 1000
+    notes: "Markowitz模型，使用半正定协方差矩阵"
+  portfolio_medium:
+    type: portfolio
+    n_range: [100, 200]
+    p_range: [50, 100]
+    q_density: 0.1
+    Q_property: psd
+    num_train: 5000
+    num_valid: 1000
+    num_test: 1000
+  qap_small:
+    type: qap
+    n_range: [100, 400]
+    p_range: [100, 400]
+    q_density: 0.8
+    Q_property: indefinite
+    num_train: 3000
+    num_valid: 600
+    num_test: 600
+  qap_medium:
+    type: qap
+    n_range: [400, 900]
+    p_range: [400, 900]
+    q_density: 0.9
+    Q_property: indefinite
+    num_train: 3000
+    num_valid: 600
+    num_test: 600
+  qcqp:
+    type: qcqp
+    n_range: [50, 150]
+    p_range: [30, 80]
+    q_density: 0.3
+    Q_property: mixed
+    num_train: 4000
+    num_valid: 800
+    num_test: 800
+    notes: "包含约束中的二次项"
+  boxqp:
+    type: boxqp
+    n_range: [20, 60]
+    p_range: [0, 0]
+    q_density: 0.7
+    Q_property: indefinite
+    num_train: 5000
+    num_valid: 1000
+    num_test: 1000
+
+linearization:
+  methods:
+    - name: pla
+      segments: [5, 10, 20, 50]
+    - name: mccormick
+      tighten_bounds: true
+    - name: adaptive
+      controller: "ml_classifier"
+  error_metrics:
+    - max_abs
+    - relative
+    - segment_wise
+
+samples_per_instance:
+  cuts: 120
+  cut_subsets: 15
+
+random_seeds:
+  generation: [42, 43, 44]
+  linearization: [100, 200]
+  training: [7, 21]

@@ -1,0 +1,22 @@
+dataset_name: portfolio_small
+problem_type: portfolio
+train_split: 5000
+valid_split: 1000
+test_split: 1000
+variables:
+  n_assets: [50, 100]
+  n_binary: [20, 40]
+  budget: 1.0
+quadratic:
+  sigma_rank: 20
+  sparsity: 0.1
+  risk_aversion: 0.5
+  seed: 42
+linearization:
+  method: pla
+  segments: 10
+  adaptive: true
+cut_generation:
+  solver: cplex
+  root_gap_samples: 15
+  max_candidate_cuts: 64
