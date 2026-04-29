@@ -109,7 +109,7 @@ where `Delta_L(S)` is the joint LP bound improvement. We train with:
 ## Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/HeteroCut-GNN.git
+git clone https://github.com/rushroomer/HeteroCut-GNN.git
 cd HeteroCut-GNN
 pip install -r requirements.txt
 ```
